@@ -1,18 +1,25 @@
 class Solution:
-    def canPartition(self, nums: List[int]):
-
-        total = sum(nums)
-
-        if total % 2:
+    def canPartition(self, nums: list[int]) -> bool:
+        dp={}
+        target=0
+        for n in nums:
+            target+=n
+        if target % 2 != 0:
             return False
+        target//=2
 
-        target = total // 2
-
-        dp = [False] * (target + 1)
-        dp[0] = True
-
-        for num in nums:
-            for s in range(target, num - 1, -1):
-                dp[s] = dp[s] or dp[s - num]
-
-        return dp[target]
+        def dfs(index,nums,target,dp):
+            if target==0:
+                return True
+            if index<0: 
+                return False
+            key=(index, target)
+            if key in dp:
+                return dp[key]
+            nottake=dfs(index-1,nums,target,dp)
+            take=False
+            if nums[index]<=target:
+                take=dfs(index-1,nums,target-nums[index],dp)
+            dp[key]=nottake or take
+            return dp[key]
+        return dfs(len(nums)-1,nums,target,dp)
