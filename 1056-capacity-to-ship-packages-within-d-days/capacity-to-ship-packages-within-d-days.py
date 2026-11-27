@@ -2,20 +2,22 @@ class Solution:
     def shipWithinDays(self, weights: list[int], days: int) -> int:
         left=0
         right=0
-        for n in weights:
-            left=max(left,n)
-            right+=n
+        for w in weights:
+            left=max(left,w)
+            right+=w
+        def possible(weight):
+            sum=0
+            d=1
+            for w in weights:
+                if sum+w>weight:
+                    d+=1
+                    sum=0
+                sum+=w
+            return d<=days
         while left<right:
             mid=left+(right-left)//2
-            carry=0
-            D=1
-            for w in weights:
-                if carry+w > mid:
-                    D+=1
-                    carry=0
-                carry+=w
-            if D>days:
-                left=mid+1
-            else:
+            if possible(mid):
                 right=mid
+            else:
+                left=mid+1
         return left
