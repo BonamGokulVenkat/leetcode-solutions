@@ -3,11 +3,11 @@ class Solution:
         if not intervals:
             return 0
         intervals.sort(key=lambda x:x[1])
+        prev_end=intervals[0][1]
         count=0
-        pre_end=intervals[0][1]
         for start,end in intervals[1:]:
-            if start<pre_end:
+            if start<prev_end:
                 count+=1
             else:
-                pre_end=end
+                prev_end=end
         return count
